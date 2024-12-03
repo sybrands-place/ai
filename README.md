@@ -43,19 +43,18 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text(App.title)),
+        // create the chat view, passing in the Gemini provider
         body: LlmChatView(
           provider: GeminiProvider(
-            model: GenerativeModel(
-              model: 'gemini-1.5-flash',
-              apiKey: geminiApiKey,
-            ),
+            model: 'gemini-1.5-flash',
+            apiKey: googleApiKey,
           ),
         ),
       );
 }
 ```
 
-Here we're creating an instance of the `GeminiProvider`, configuring it as appropriate with an instance of the `GenerativeModel` from the `google_generative_ai` package and passing it to an instance of the `LlmChatView`. That yields the screenshot above using Google Gemini AI as the LLM. You can see more details about configuring both the Gemini and Vertex LLM providers below.
+Here we're creating an instance of the `GeminiProvider`, configuring it as appropriate and passing it to an instance of the `LlmChatView`. That yields the screenshot above using Google Gemini AI as the LLM. You can see more details about configuring both the Gemini and Vertex LLM providers below.
 
 ## Gemini LLM Usage
 To configure the `GeminiProvider` you two things:

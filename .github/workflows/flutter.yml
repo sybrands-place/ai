@@ -27,3 +27,5 @@ jobs:
         run: dart fix --dry-run
       - name: Run tests
         run: flutter test
+      - name: Check API docs can generate
+        run: dart doc --dry-run

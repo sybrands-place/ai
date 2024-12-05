@@ -5,7 +5,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Smoke Test', (tester) async { 
+  testWidgets('Smoke Test', (tester) async {
     // TODO(csells): add tests.
   });
 }

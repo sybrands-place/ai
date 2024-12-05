@@ -63,21 +63,13 @@ To configure the `GeminiProvider` you two things:
 2. an API key, which you can get [in Gemini AI Studio](https://aistudio.google.com/app/apikey).
 
 With this in place, you're ready to write the Gemini code shown above. If you like, you can plug your API key and model string into the <a href="https://github.com/flutter/ai/blob/main/example/lib/gemini/gemini.dart">gemini.dart</a> sample. This sample has been tested on Android, iOS, the web and macOS, so give it a whirl.
-### gemini_api_key.dart
-Most of [the sample apps](https://github.com/flutter/ai/tree/main/example) reply on a Gemini API key, so for those to work, you'll need to plug your API key into a file called `gemini_api_key.dart` and put it in the `example/lib` folder (after cloning the repo, of course). Here's what it should look like:
 
-```dart
-// example/lib/gemini_api_key.dart
-const geminiApiKey = 'YOUR-API-KEY';
-```
-
-Note: Be careful not to check your API key into a git repo or share it with anyone.
 ## Vertex LLM Usage
 While Gemini AI is useful for quick prototyping, the recommended solution for production apps is Vertex AI in Firebase. And the reason for that is that there's no good way to keep your Gemini API key safe -- if you ship your Flutter app with the API key in there, someone can figure out how to dig it out.
 
 To solve this problem as well as many others that you're going to have in a real-world production app, the model for initializing an instance of the Vertex AI LLM provider doesn't have an API key. Instead, it relies on a Firebase project, which you then initialize in your app. You can do that with the steps described in [the Get started with the Gemini API using the Vertex AI in Firebase SDKs docs](https://firebase.google.com/docs/vertex-ai/get-started?platform=flutter).
 
-Also make sure you configure your FlutterApp using the `flutterfire` CLI tool as described in [the Add Firebase to your Flutter app docs](https://firebase.google.com/docs/flutter/setup). **Make sure to run this tool from within the `example` directory.**
+Also make sure you configure your FlutterApp using the `flutterfire` CLI tool as described in [the Add Firebase to your Flutter app docs](https://firebase.google.com/docs/flutter/setup).
 
 After following these instructions, you're ready to use Firebase Vertex AI in your project. Start by initializing Firebase:
 
@@ -123,7 +115,7 @@ class ChatPage extends StatelessWidget {
 ```
 If you like, use your Firebase project with the <a href="https://github.com/flutter/ai/blob/main/example/lib/vertex/vertex.dart">vertex.dart</a> sample. This sample is supported on Android, iOS, the web and macOS.
 
-Note: There's no API key; Firebase manages all of that for you in the Firebase project. However, in the same way that someone can reverse engineer the Gemini API key out of your Flutter code, they can do that with your Firebase project ID and related settings. To guard against that, check out [Firebase AppCheck](https://firebase.google.com/learn/pathways/firebase-app-check).
+NOTE: There's no API key; Firebase manages all of that for you in the Firebase project. However, in the same way that someone can reverse engineer the Gemini API key out of your Flutter code, they can do that with your Firebase project ID and related settings. To guard against that, check out [Firebase AppCheck](https://firebase.google.com/learn/pathways/firebase-app-check).
 
 ## Device Access Permissions
 To enable the microphone feature, configure your app according to [the record package's permission setup instructions](https://pub.dev/packages/record#setup-permissions-and-others).
@@ -135,6 +127,19 @@ To enable the user to select an image file on their device, configure your app a
 To enable the user to take a picture on their device, configurate your app according to [the image_picker plugin's installation instructions](https://pub.dev/packages/image_picker#installation).
 
 To enable the user to take a picture on the web, configure your app according to [the camera plugin's setup instructions](https://pub.dev/packages/camera#setup).
+
+## Samples
+To execute the example apps in repo, you'll need to replace the `example/lib/gemini_api_key.dart` and firebase_options.dart files, both of which are just placeholders. They're needed to enable the example projects in the `example/lib` folder.
+
+### gemini_api_key.dart
+Most of [the example apps](https://github.com/flutter/ai/tree/main/example) reply on a Gemini API key, so for those to work, you'll need to plug your API key the `example/lib/gemini_api_key.dart` file. You can get an API key [in Gemini AI Studio](https://aistudio.google.com/app/apikey).
+
+**NOTE: Be careful not to check the `gemini_api_key.dart` file into your git repo.**
+
+### firebase_options.dart
+To use the Vertex AI example, you need to place your Firebase configuration details into the `example/lib/firebase_options.dart` file. You can do this running the `flutterfire` CLI tool as described in [the Add Firebase to your Flutter app docs](https://firebase.google.com/docs/flutter/setup) ***from within the `example` directory***.
+
+**NOTE: Be careful not to check the `firebase_options.dart` file into your git repo.**
 
 ## Feedback!
 Along the way, as you use this package, please [log issues and feature requests](https://github.com/flutter/ai/issues) as well as any [code you'd like to contribute](https://github.com/flutter/ai/pulls). I want your feedback and your contributions to ensure that the AI Toolkit is just as robust and useful as it can be for your real-world apps.

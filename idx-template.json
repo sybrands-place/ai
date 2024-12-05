@@ -1,0 +1,11 @@
+{
+    "name": "Flutter AI Toolkit",
+    "description": "Flutter AI Toolkit",
+    "categories": ["Mobile", "AI & ML"],
+    "icon": "https://www.gstatic.com/images/branding/productlogos/flutter/v6/192px.svg",
+    "publisher": "Google LLC",
+    "host": {
+      "virtualization": "true"
+    }
+  }
+  

@@ -27,7 +27,7 @@ jobs:
       - run: flutter --version
       - run: flutter pub get
       - name: Lint analysis
-        run: dart analyze
+        run: dart analyze --fatal-infos
       - name: Dart format
         run: dart format --output none --set-exit-if-changed .
       - name: dart fix

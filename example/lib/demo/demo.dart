@@ -248,7 +248,7 @@ class _ChatPageState extends State<ChatPage>
         textStyle: halloweenTextStyle.copyWith(color: Colors.black),
         hintText: 'good evening...',
         hintStyle:
-            halloweenTextStyle.copyWith(color: Colors.orange.withOpacity(.5)),
+            halloweenTextStyle.copyWith(color: Colors.orange.withAlpha(128)),
       ),
       userMessageStyle: UserMessageStyle(
         textStyle: halloweenTextStyle.copyWith(color: Colors.black),
@@ -265,7 +265,7 @@ class _ChatPageState extends State<ChatPage>
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withAlpha(128),
               blurRadius: 10,
               spreadRadius: 2,
             ),
@@ -303,7 +303,7 @@ class _ChatPageState extends State<ChatPage>
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withAlpha(76),
               blurRadius: 8,
               offset: Offset(2, 2),
             ),

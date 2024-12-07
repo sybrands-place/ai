@@ -129,7 +129,7 @@ To enable the user to take a picture on their device, configurate your app accor
 To enable the user to take a picture on the web, configure your app according to [the camera plugin's setup instructions](https://pub.dev/packages/camera#setup).
 
 ## Samples
-To execute the example apps in repo, you'll need to replace the `example/lib/gemini_api_key.dart` and firebase_options.dart files, both of which are just placeholders. They're needed to enable the example projects in the `example/lib` folder.
+To execute the example apps in repo, you'll need to replace the `example/lib/gemini_api_key.dart` and `example/lib/firebase_options.dart` files, both of which are just placeholders. They're needed to enable the example projects in the `example/lib` folder.
 
 ### gemini_api_key.dart
 Most of [the example apps](https://github.com/flutter/ai/tree/main/example) reply on a Gemini API key, so for those to work, you'll need to plug your API key the `example/lib/gemini_api_key.dart` file. You can get an API key [in Gemini AI Studio](https://aistudio.google.com/app/apikey).

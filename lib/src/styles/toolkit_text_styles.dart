@@ -68,7 +68,7 @@ abstract final class ToolkitTextStyles {
   ///
   /// Used for the text of tooltips.
   static final TextStyle tooltip = GoogleFonts.roboto(
-    color: ToolkitColors.tooltipText.withOpacity(0.9),
+    color: ToolkitColors.tooltipText.withAlpha(230),
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );

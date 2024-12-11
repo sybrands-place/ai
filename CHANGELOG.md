@@ -1,3 +1,7 @@
+## 0.6.6
+
+* Update for Flutter 3.27.0
+
 ## 0.6.5
 
 * implemented #12: would like some hover icons for copy+edit on web and desktop

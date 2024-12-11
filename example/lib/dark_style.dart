@@ -134,12 +134,10 @@ SuggestionStyle _darkSuggestionStyle() {
 
 const Color _greyBackground = Color(0xFF535353);
 
-Color _invertColor(Color? color) => Color.fromARGB(
-      color!.alpha,
-      255 - color.red,
-      255 - color.green,
-      255 - color.blue,
-    );
+Color? _invertColor(Color? color) => color != null
+    ? Color.from(
+        alpha: color.a, red: 1 - color.r, green: 1 - color.g, blue: 1 - color.b)
+    : null;
 
 Decoration _invertDecoration(Decoration? decoration) => switch (decoration!) {
       final BoxDecoration d => d.copyWith(color: _invertColor(d.color)),

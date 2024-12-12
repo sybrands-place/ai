@@ -91,7 +91,7 @@ class ChatPage extends StatelessWidget {
         provider: GeminiProvider(
           model: GenerativeModel(
             model: 'gemini-1.5-flash',
-            apiKey: 'AIzaNotARealAPIKey',
+            apiKey: 'GEMINI-API-KEY',
           ),
         ),
       ),

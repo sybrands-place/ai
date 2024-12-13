@@ -26,6 +26,7 @@ The [source code for this demo](https://github.com/flutter/ai/blob/main/example/
 
 ## Getting started
 
+<!-- Commenting this out for now, as it doesn't appear to work
 <a href="https://idx.google.com/new?template=https%3A%2F%2Fgithub.com%2Fflutter%2Fai">
   <picture>
     <source
@@ -40,15 +41,13 @@ The [source code for this demo](https://github.com/flutter/ai/blob/main/example/
       src="https://cdn.idx.dev/btn/try_purple_32.svg">
   </picture>
 </a>
+-->
 
 **1. Installation**
 Add the following dependencies to your `pubspec.yaml` file:
 
-```yaml
-dependencies:
-  flutter_ai_toolkit: ^latest_version
-  google_generative_ai: ^latest_version # you may choose to use Gemini,
-  firebase_core: ^latest_version # or Vertex AI or both
+```console
+$ flutter pub add flutter_ai_toolkit google_generative_ai firebase_core
 ```
 **2. Gemini AI configuration**
 The toolkit supports both Google Gemini AI and Firebase Vertex AI as LLM providers. To use Google Gemini AI, obtain an API key from [the Gemini AI Studio](https://aistudio.google.com/app/apikey). Be careful not to check this key in your source code repository to prevent unauthorized access.
@@ -56,26 +55,48 @@ The toolkit supports both Google Gemini AI and Firebase Vertex AI as LLM provide
 You’ll also need to choose a specific Gemini model name to use in creating an instance of the Gemini model. Here we’re using `gemini-1.5-flash` but you can choose from an ever-expanding set of models.
 
 ```dart
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 
-... // app stuff here
+void main() {
+  runApp(const MyApp());
+}
 
-class ChatPage extends StatelessWidget {
-  const ChatPage({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: const Text(App.title)),
-        body: LlmChatView(
-          provider: GeminiProvider(
-            model: GenerativeModel(
-              model: 'gemini-1.5-flash',
-              apiKey: 'GEMINI-API-KEY',
-            ),
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const ChatPage(title: 'Generative AI Chat'),
+    );
+  }
+}
+
+class ChatPage extends StatelessWidget {
+  const ChatPage({super.key, required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: LlmChatView(
+        provider: GeminiProvider(
+          model: GenerativeModel(
+            model: 'gemini-1.5-flash',
+            apiKey: 'GEMINI-API-KEY',
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 ```
 

@@ -1,3 +1,7 @@
+## 0.6.7
+
+* Minor fixes
+
 ## 0.6.6
 
 * Update for Flutter 3.27.0

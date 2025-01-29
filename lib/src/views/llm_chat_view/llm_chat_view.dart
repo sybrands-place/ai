@@ -65,6 +65,16 @@ class LlmChatView extends StatefulWidget {
   ///   when the chat history is empty. Defaults to an empty list.
   /// - [welcomeMessage]: Optional. A welcome message to display when the chat
   ///   is first opened.
+  /// - [onCancelCallback]: Optional. The action to perform when the user
+  ///   cancels a chat operation. By default, a snackbar is displayed with the
+  ///   canceled message.
+  /// - [onErrorCallback]: Optional. The action to perform when an
+  ///   error occurs during a chat operation. By default, an alert dialog is
+  ///   displayed with the error message.
+  /// - [cancelMessage]: Optional. The message to display when the user cancels
+  ///   a chat operation. Defaults to 'CANCEL'.
+  /// - [errorMessage]: Optional. The message to display when an error occurs
+  ///   during a chat operation. Defaults to 'ERROR'.
   LlmChatView({
     required LlmProvider provider,
     LlmChatViewStyle? style,
@@ -72,6 +82,10 @@ class LlmChatView extends StatefulWidget {
     LlmStreamGenerator? messageSender,
     this.suggestions = const [],
     String? welcomeMessage,
+    this.onCancelCallback,
+    this.onErrorCallback,
+    this.cancelMessage = 'CANCEL',
+    this.errorMessage = 'ERROR',
     super.key,
   }) : viewModel = ChatViewModel(
           provider: provider,
@@ -94,6 +108,27 @@ class LlmChatView extends StatefulWidget {
   /// response builder, welcome message, and LLM icon for the chat interface.
   /// It encapsulates the core data and functionality needed for the chat view.
   late final ChatViewModel viewModel;
+
+  /// The action to perform when the user cancels a chat operation.
+  ///
+  /// By default, a snackbar is displayed with the canceled message.
+  final void Function(BuildContext context)? onCancelCallback;
+
+  /// The action to perform when an error occurs during a chat operation.
+  ///
+  /// By default, an alert dialog is displayed with the error message.
+  final void Function(BuildContext context, LlmException error)?
+      onErrorCallback;
+
+  /// The text message to display when the user cancels a chat operation.
+  ///
+  /// Defaults to 'CANCEL'.
+  final String cancelMessage;
+
+  /// The text message to display when an error occurs during a chat operation.
+  ///
+  /// Defaults to 'ERROR'.
+  final String errorMessage;
 
   @override
   State<LlmChatView> createState() => _LlmChatViewState();
@@ -280,19 +315,32 @@ class _LlmChatViewState extends State<LlmChatView>
     // empty LLM message.
     final llmMessage = widget.viewModel.provider.history.last;
     if (llmMessage.text == null) {
-      llmMessage.append(error is LlmCancelException ? 'CANCEL' : 'ERROR');
+      llmMessage.append(
+        error is LlmCancelException
+            ? widget.cancelMessage
+            : widget.errorMessage,
+      );
     }
 
     switch (error) {
       case LlmCancelException():
-        AdaptiveSnackBar.show(context, 'LLM operation canceled by user');
+        if (widget.onCancelCallback != null) {
+          widget.onCancelCallback!(context);
+        } else {
+          AdaptiveSnackBar.show(context, 'LLM operation canceled by user');
+        }
+        break;
       case LlmFailureException():
       case LlmException():
-        await AdaptiveAlertDialog.show(
-          context: context,
-          content: Text(error.toString()),
-          showOK: true,
-        );
+        if (widget.onErrorCallback != null) {
+          widget.onErrorCallback!(context, error);
+        } else {
+          await AdaptiveAlertDialog.show(
+            context: context,
+            content: Text(error.toString()),
+            showOK: true,
+          );
+        }
     }
   }
 

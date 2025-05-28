@@ -2,44 +2,34 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:firebase_ai/firebase_ai.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ai_toolkit/flutter_ai_toolkit.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../dark_style.dart';
-import 'api_key_page.dart';
-
-late final SharedPreferences prefs;
+// from `flutterfire config`: https://firebase.google.com/docs/flutter/setup
+import '../firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  runApp(App(prefs: prefs));
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(const App());
 }
 
 class App extends StatefulWidget {
   static const title = 'Demo: Flutter AI Toolkit';
   static final themeMode = ValueNotifier(ThemeMode.light);
 
-  const App({super.key, required this.prefs});
-  final SharedPreferences prefs;
+  const App({super.key});
 
   @override
   State<App> createState() => _AppState();
 }
 
 class _AppState extends State<App> {
-  String? _geminiApiKey;
-
-  @override
-  void initState() {
-    super.initState();
-    _geminiApiKey = widget.prefs.getString('gemini_api_key');
-  }
-
   @override
   Widget build(BuildContext context) => ValueListenableBuilder<ThemeMode>(
     valueListenable: App.themeMode,
@@ -49,37 +39,14 @@ class _AppState extends State<App> {
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           themeMode: mode,
-          home:
-              _geminiApiKey == null
-                  ? GeminiApiKeyPage(title: App.title, onApiKey: _setApiKey)
-                  : ChatPage(
-                    geminiApiKey: _geminiApiKey!,
-                    onResetApiKey: _resetApiKey,
-                  ),
+          home: ChatPage(),
           debugShowCheckedModeBanner: false,
         ),
   );
-
-  void _setApiKey(String apiKey) {
-    setState(() => _geminiApiKey = apiKey);
-    widget.prefs.setString('gemini_api_key', apiKey);
-  }
-
-  void _resetApiKey() {
-    setState(() => _geminiApiKey = null);
-    widget.prefs.remove('gemini_api_key');
-  }
 }
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({
-    required this.geminiApiKey,
-    required this.onResetApiKey,
-    super.key,
-  });
-
-  final String geminiApiKey;
-  final void Function() onResetApiKey;
+  const ChatPage({super.key});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -94,11 +61,8 @@ class _ChatPageState extends State<ChatPage>
     upperBound: 1.0,
   );
 
-  late final _provider = GeminiProvider(
-    model: GenerativeModel(
-      model: 'gemini-2.0-flash',
-      apiKey: widget.geminiApiKey,
-    ),
+  late final _provider = FirebaseProvider(
+    model: FirebaseAI.googleAI().generativeModel(model: 'gemini-2.0-flash'),
   );
 
   final _halloweenMode = ValueNotifier(false);
@@ -128,11 +92,6 @@ class _ChatPageState extends State<ChatPage>
           appBar: AppBar(
             title: const Text(App.title),
             actions: [
-              IconButton(
-                onPressed: widget.onResetApiKey,
-                tooltip: 'Reset API Key',
-                icon: const Icon(Icons.key),
-              ),
               IconButton(
                 onPressed: _clearHistory,
                 tooltip: 'Clear History',

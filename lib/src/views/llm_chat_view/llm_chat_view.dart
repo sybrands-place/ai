@@ -5,7 +5,7 @@
 import 'dart:async';
 
 import 'package:cross_file/cross_file.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import '../../chat_view_model/chat_view_model.dart';
 import '../../chat_view_model/chat_view_model_provider.dart';
@@ -212,6 +212,7 @@ class _LlmChatViewState extends State<LlmChatView>
                         ],
                       ),
                     ),
+                    Divider(),
                     ChatInput(
                       initialMessage: _initialMessage,
                       autofocus:

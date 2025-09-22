@@ -46,64 +46,95 @@ class ChatHistoryView extends StatefulWidget {
 }
 
 class _ChatHistoryViewState extends State<ChatHistoryView> {
+  final _clientKey = const Key('chat-client');
+  final _listKey = const Key('chat-list');
+  final ScrollController _scrollController = ScrollController(
+    keepScrollOffset: false,
+  );
+
+  int userMessageCount = 0;
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-    child: ChatViewModelClient(
-      builder: (context, viewModel, child) {
-        final showWelcomeMessage = viewModel.welcomeMessage != null;
-        final showSuggestions =
-            viewModel.suggestions.isNotEmpty &&
-            viewModel.provider.history.isEmpty;
-        final history = [
-          if (showWelcomeMessage)
-            ChatMessage(
-              origin: MessageOrigin.llm,
-              text: viewModel.welcomeMessage,
-              attachments: [],
-            ),
-          ...viewModel.provider.history,
-        ];
+  Widget build(BuildContext context) => ChatViewModelClient(
+    key: _clientKey,
+    builder: (context, viewModel, child) {
+      final showWelcomeMessage = viewModel.welcomeMessage != null;
+      final showSuggestions =
+          viewModel.suggestions.isNotEmpty &&
+          viewModel.provider.history.isEmpty;
+      final history = [
+        if (showWelcomeMessage)
+          ChatMessage(
+            origin: MessageOrigin.llm,
+            text: viewModel.welcomeMessage,
+            attachments: [],
+          ),
+        if (showSuggestions)
+          ChatSuggestionsView(
+            suggestions: viewModel.suggestions,
+            onSelectSuggestion: widget.onSelectSuggestion,
+          ),
+        ...viewModel.provider.history,
+      ];
 
-        return ListView.builder(
-          reverse: true,
-          itemCount: history.length + (showSuggestions ? 1 : 0),
-          itemBuilder: (context, index) {
-            if (showSuggestions) {
-              index -= showWelcomeMessage ? 1 : 0;
-              if (index == history.length - (showWelcomeMessage ? 2 : 0)) {
-                return ChatSuggestionsView(
-                  suggestions: viewModel.suggestions,
-                  onSelectSuggestion: widget.onSelectSuggestion,
-                );
-              }
-            }
-            final messageIndex = history.length - index - 1;
-            final message = history[messageIndex];
-            final isLastUserMessage =
-                message.origin.isUser && messageIndex >= history.length - 2;
-            final canEdit = isLastUserMessage && widget.onEditMessage != null;
-            final isUser = message.origin.isUser;
-
-            return Padding(
-              padding: const EdgeInsets.only(top: 6),
-              child:
-                  isUser
-                      ? UserMessageView(
-                        message,
-                        onEdit:
-                            canEdit
-                                ? () => widget.onEditMessage?.call(message)
-                                : null,
-                      )
-                      : LlmMessageView(
-                        message,
-                        isWelcomeMessage: messageIndex == 0,
-                      ),
+      final currentCount =
+          history
+              .where((e) => e is ChatMessage && e.origin == MessageOrigin.user)
+              .length;
+      print('TT: $currentCount != $userMessageCount');
+      if (currentCount != userMessageCount) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients &&
+              !_scrollController.position.isScrollingNotifier.value) {
+            _scrollController.animateTo(
+              _scrollController.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOut,
             );
-          },
-        );
-      },
-    ),
+          }
+        });
+        userMessageCount = currentCount;
+      }
+
+      return ListView.builder(
+        key: _listKey,
+        padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+        physics: ClampingScrollPhysics(),
+        controller: _scrollController,
+        // reverse: true,
+        itemCount: history.length,
+        itemBuilder: (context, index) {
+          final messageIndex = index; //history.length - index - 1;
+          final message = history[messageIndex];
+
+          if (message is ChatSuggestionsView) {
+            return message;
+          }
+          if (message is! ChatMessage) {
+            return Text('unknown item');
+          }
+          final isLastUserMessage =
+              message.origin.isUser && messageIndex >= history.length - 2;
+          final canEdit = isLastUserMessage && widget.onEditMessage != null;
+          final isUser = message.origin.isUser;
+
+          return Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child:
+                isUser
+                    ? UserMessageView(
+                      message,
+                      onEdit:
+                          canEdit
+                              ? () => widget.onEditMessage?.call(message)
+                              : null,
+                    )
+                    : LlmMessageView(
+                      message,
+                      isWelcomeMessage: messageIndex == 0,
+                    ),
+          );
+        },
+      );
+    },
   );
 }

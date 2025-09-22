@@ -80,7 +80,6 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
           history
               .where((e) => e is ChatMessage && e.origin == MessageOrigin.user)
               .length;
-      print('TT: $currentCount != $userMessageCount');
       if (currentCount != userMessageCount) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (_scrollController.hasClients &&

@@ -104,7 +104,7 @@ class LlmMessageView extends StatelessWidget {
           ],
         ),
       ),
-      const Flexible(flex: 2, child: SizedBox()),
+      const Flexible(flex: 0, child: SizedBox()),
     ],
   );
 }

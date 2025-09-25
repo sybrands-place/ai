@@ -92,9 +92,10 @@ class TextOrAudioInput extends StatelessWidget {
                       autofocus: _autofocus,
                       focusNode: _focusNode,
                       textInputAction:
-                          isMobile
+                          /*isMobile
                               ? TextInputAction.newline
-                              : TextInputAction.done,
+                              :*/
+                          TextInputAction.done,
                       onSubmitted:
                           _inputState == InputState.canSubmitPrompt
                               ? (_) => _onSubmitPrompt()

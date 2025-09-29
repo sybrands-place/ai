@@ -232,6 +232,8 @@ class _LlmChatViewState extends State<LlmChatView>
                       onTranslateStt: _onTranslateStt,
                       onCancelStt:
                           _pendingSttResponse == null ? null : _onCancelStt,
+                      onSpeechToTextStart: widget.viewModel.onSpeechToTextStart,
+                      onSpeechToTextStop: widget.viewModel.onSpeechToTextStop,
                     ),
                   ],
                 ),

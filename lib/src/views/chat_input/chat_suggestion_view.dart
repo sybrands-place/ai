@@ -56,7 +56,10 @@ class ChatSuggestionsView extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: Transform.translate(
                           offset: Offset(16, 16),
-                          child: Icon(Icons.touch_app_outlined),
+                          child: Icon(
+                            Icons.touch_app_outlined,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),

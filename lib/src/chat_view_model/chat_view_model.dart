@@ -35,6 +35,8 @@ class ChatViewModel {
     required this.speechToText,
     required this.enableAttachments,
     required this.enableVoiceNotes,
+    required this.onSpeechToTextStart,
+    required this.onSpeechToTextStop,
   });
 
   /// The LLM provider for the chat interface.
@@ -92,6 +94,16 @@ class ChatViewModel {
   /// will be disabled.
   final bool enableVoiceNotes;
 
+  /// The speech to text converter for the chat interface.
+  ///
+  /// This will override the internal functionality
+  final void Function()? onSpeechToTextStart;
+
+  /// The speech to text converter for the chat interface.
+  ///
+  /// This will override the internal functionality
+  final void Function()? onSpeechToTextStop;
+
   // The following is needed to support the
   // ChatViewModelProvider.updateShouldNotify implementation
   @override
@@ -105,7 +117,9 @@ class ChatViewModel {
           other.responseBuilder == responseBuilder &&
           other.messageSender == messageSender &&
           other.enableAttachments == enableAttachments &&
-          other.enableVoiceNotes == enableVoiceNotes);
+          other.enableVoiceNotes == enableVoiceNotes &&
+          other.onSpeechToTextStart == onSpeechToTextStart &&
+          other.onSpeechToTextStop == onSpeechToTextStop);
 
   // the following is best practices when overriding operator ==
   @override
@@ -118,5 +132,7 @@ class ChatViewModel {
     messageSender,
     enableAttachments,
     enableVoiceNotes,
+    onSpeechToTextStart,
+    onSpeechToTextStop,
   );
 }

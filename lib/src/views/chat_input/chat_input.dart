@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:file_selector/file_selector.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
@@ -39,6 +40,8 @@ class ChatInput extends StatefulWidget {
     this.onCancelMessage,
     this.onCancelStt,
     this.autofocus = true,
+    this.onSpeechToTextStart,
+    this.onSpeechToTextStop,
     super.key,
   }) : assert(
          !(onCancelMessage != null && onCancelStt != null),
@@ -80,6 +83,16 @@ class ChatInput extends StatefulWidget {
 
   /// Whether the input should automatically focus
   final bool autofocus;
+
+  /// The speech to text converter for the chat interface.
+  ///
+  /// This will override the internal functionality
+  final void Function()? onSpeechToTextStart;
+
+  /// The speech to text converter for the chat interface.
+  ///
+  /// This will override the internal functionality
+  final void Function()? onSpeechToTextStop;
 
   @override
   State<ChatInput> createState() => _ChatInputState();
@@ -247,14 +260,26 @@ class _ChatInputState extends State<ChatInput> {
   }
 
   Future<void> onStartRecording() async {
+    if (widget.onSpeechToTextStart != null) {
+      widget.onSpeechToTextStart!.call();
+      return;
+    }
     await _waveController.startRecording();
   }
 
   Future<void> onStopRecording() async {
+    if (widget.onSpeechToTextStop != null) {
+      widget.onSpeechToTextStop!.call();
+      return;
+    }
     await _waveController.stopRecording();
   }
 
   Future<void> onRecordingStopped() async {
+    if (widget.onSpeechToTextStop != null) {
+      widget.onTranslateStt(XFile.fromData(Uint8List(0)), List.empty());
+      return;
+    }
     final file = _waveController.file;
 
     if (file == null) {

@@ -92,6 +92,8 @@ class LlmChatView extends StatefulWidget {
     this.enableVoiceNotes = true,
     this.autofocus,
     super.key,
+    void Function()? onSpeechToTextStart,
+    void Function()? onSpeechToTextStop,
   }) : viewModel = ChatViewModel(
          provider: provider,
          responseBuilder: responseBuilder,
@@ -102,6 +104,8 @@ class LlmChatView extends StatefulWidget {
          welcomeMessage: welcomeMessage,
          enableAttachments: enableAttachments,
          enableVoiceNotes: enableVoiceNotes,
+         onSpeechToTextStart: onSpeechToTextStart,
+         onSpeechToTextStop: onSpeechToTextStop,
        );
 
   /// Whether to enable file and image attachments in the chat input.

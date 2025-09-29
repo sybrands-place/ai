@@ -39,24 +39,24 @@ class ChatSuggestionsView extends StatelessWidget {
           for (final suggestion in suggestions)
             GestureDetector(
               onTap: () => onSelectSuggestion(suggestion),
-              child: Stack(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(8),
-                    padding: const EdgeInsets.all(8),
-                    decoration: suggestionStyle.decoration,
-                    child: Text(
+              child: Container(
+                margin: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
+                decoration: suggestionStyle.decoration,
+                child: Stack(
+                  children: [
+                    Text(
                       suggestion,
                       softWrap: true,
                       maxLines: 3,
                       style: suggestionStyle.textStyle,
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Icon(Icons.touch_app_outlined),
-                  ),
-                ],
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Icon(Icons.touch_app_outlined),
+                    ),
+                  ],
+                ),
               ),
             ),
         ],

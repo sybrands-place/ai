@@ -51,9 +51,14 @@ class ChatSuggestionsView extends StatelessWidget {
                       maxLines: 3,
                       style: suggestionStyle.textStyle,
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Icon(Icons.touch_app_outlined),
+                    Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Transform.translate(
+                          offset: Offset(16, 16),
+                          child: Icon(Icons.touch_app_outlined),
+                        ),
+                      ),
                     ),
                   ],
                 ),

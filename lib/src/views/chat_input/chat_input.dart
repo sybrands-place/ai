@@ -262,7 +262,7 @@ class _ChatInputState extends State<ChatInput> {
   Future<void> onStartRecording() async {
     if (widget.onSpeechToTextStart != null) {
       widget.onSpeechToTextStart!.call();
-      return;
+      // return;
     }
     await _waveController.startRecording();
   }
@@ -270,7 +270,7 @@ class _ChatInputState extends State<ChatInput> {
   Future<void> onStopRecording() async {
     if (widget.onSpeechToTextStop != null) {
       widget.onSpeechToTextStop!.call();
-      return;
+      // return;
     }
     await _waveController.stopRecording();
   }

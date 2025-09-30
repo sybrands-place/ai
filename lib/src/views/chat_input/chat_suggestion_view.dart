@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../chat_view_model/chat_view_model_client.dart';
 import '../../styles/suggestion_style.dart';

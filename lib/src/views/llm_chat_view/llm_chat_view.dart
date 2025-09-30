@@ -90,6 +90,7 @@ class LlmChatView extends StatefulWidget {
     this.errorMessage = 'ERROR',
     this.enableAttachments = true,
     this.enableVoiceNotes = true,
+    this.isReadOnly = false,
     this.autofocus,
     super.key,
     void Function()? onSpeechToTextStart,
@@ -155,6 +156,9 @@ class LlmChatView extends StatefulWidget {
   /// will be focused automatically.
   final bool? autofocus;
 
+  /// Whether to show input field.
+  final bool isReadOnly;
+
   @override
   State<LlmChatView> createState() => _LlmChatViewState();
 }
@@ -216,25 +220,28 @@ class _LlmChatViewState extends State<LlmChatView>
                         ],
                       ),
                     ),
-                    Divider(),
-                    ChatInput(
-                      initialMessage: _initialMessage,
-                      autofocus:
-                          widget.autofocus ??
-                          widget.viewModel.suggestions.isEmpty,
-                      onCancelEdit:
-                          _associatedResponse != null ? _onCancelEdit : null,
-                      onSendMessage: _onSendMessage,
-                      onCancelMessage:
-                          _pendingPromptResponse == null
-                              ? null
-                              : _onCancelMessage,
-                      onTranslateStt: _onTranslateStt,
-                      onCancelStt:
-                          _pendingSttResponse == null ? null : _onCancelStt,
-                      onSpeechToTextStart: widget.viewModel.onSpeechToTextStart,
-                      onSpeechToTextStop: widget.viewModel.onSpeechToTextStop,
-                    ),
+                    if (!widget.isReadOnly) ...[
+                      Divider(),
+                      ChatInput(
+                        initialMessage: _initialMessage,
+                        autofocus:
+                            widget.autofocus ??
+                            widget.viewModel.suggestions.isEmpty,
+                        onCancelEdit:
+                            _associatedResponse != null ? _onCancelEdit : null,
+                        onSendMessage: _onSendMessage,
+                        onCancelMessage:
+                            _pendingPromptResponse == null
+                                ? null
+                                : _onCancelMessage,
+                        onTranslateStt: _onTranslateStt,
+                        onCancelStt:
+                            _pendingSttResponse == null ? null : _onCancelStt,
+                        onSpeechToTextStart:
+                            widget.viewModel.onSpeechToTextStart,
+                        onSpeechToTextStop: widget.viewModel.onSpeechToTextStop,
+                      ),
+                    ],
                   ],
                 ),
               ),

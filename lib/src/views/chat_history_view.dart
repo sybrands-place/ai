@@ -94,6 +94,10 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
         userMessageCount = currentCount;
       }
 
+      if (history.isEmpty) {
+        return Center(child: Text('Geen berichten'));
+      }
+
       return ListView.builder(
         key: _listKey,
         padding: const EdgeInsets.only(top: 16, left: 16, right: 16),

@@ -276,11 +276,15 @@ class _ChatInputState extends State<ChatInput> {
   }
 
   Future<void> onRecordingStopped() async {
+    final file = _waveController.file;
+
     if (widget.onSpeechToTextStop != null) {
-      widget.onTranslateStt(XFile.fromData(Uint8List(0)), List.empty());
+      widget.onTranslateStt(
+        file ?? XFile.fromData(Uint8List(0)),
+        List.from(_attachments),
+      );
       return;
     }
-    final file = _waveController.file;
 
     if (file == null) {
       AdaptiveSnackBar.show(context, 'Unable to record audio');

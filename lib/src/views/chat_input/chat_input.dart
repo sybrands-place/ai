@@ -5,8 +5,9 @@
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_ai_toolkit/src/views/chat_input/fake_waveform_recorder_controller.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:waveform_recorder/waveform_recorder.dart';
+// import 'package:waveform_recorder/waveform_recorder.dart';
 
 import '../../chat_view_model/chat_view_model.dart';
 import '../../chat_view_model/chat_view_model_provider.dart';
@@ -124,7 +125,7 @@ class _ChatInputState extends State<ChatInput> {
   final _focusNode = FocusNode();
 
   final _textController = TextEditingController();
-  final _waveController = WaveformRecorderController();
+  final _waveController = FakeWaveformRecorderController();
   final _attachments = <Attachment>[];
 
   ChatViewModel? _viewModel;

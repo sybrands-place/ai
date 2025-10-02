@@ -36,6 +36,7 @@ class FakeWaveformRecorderController extends WaveformRecorderController {
   Future<void> stopRecording() async {
     _isRecording = false;
     _stopwatch.stop();
+    _stopwatch.reset();
     notifyListeners();
   }
 
@@ -55,12 +56,14 @@ class FakeWaveformRecorderController extends WaveformRecorderController {
   Future<void> cancelRecording() async {
     _isRecording = false;
     _stopwatch.stop();
+    _stopwatch.reset();
     notifyListeners();
   }
 
   @override
   void clear() {
     _stopwatch.stop();
+    _stopwatch.reset();
     notifyListeners();
   }
 }

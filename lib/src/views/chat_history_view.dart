@@ -68,11 +68,19 @@ class _ChatHistoryViewState extends State<ChatHistoryView> {
             text: viewModel.welcomeMessage,
             attachments: [],
           ),
-        if (showSuggestions)
+        if (showSuggestions) ...[
+          if (viewModel.suggestionsMessage != null &&
+              viewModel.suggestionsMessage!.isNotEmpty)
+            ChatMessage(
+              origin: MessageOrigin.llm,
+              text: viewModel.suggestionsMessage,
+              attachments: [],
+            ),
           ChatSuggestionsView(
             suggestions: viewModel.suggestions,
             onSelectSuggestion: widget.onSelectSuggestion,
           ),
+        ],
         ...viewModel.provider.history,
       ];
 

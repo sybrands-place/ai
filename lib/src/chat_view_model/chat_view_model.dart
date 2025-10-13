@@ -30,6 +30,7 @@ class ChatViewModel {
     required this.style,
     required this.suggestions,
     required this.welcomeMessage,
+    required this.suggestionsMessage,
     required this.responseBuilder,
     required this.messageSender,
     required this.speechToText,
@@ -57,6 +58,12 @@ class ChatViewModel {
   /// when the chat history is empty. The user can select any of these
   /// suggestions to quickly start a conversation with the LLM.
   final List<String> suggestions;
+
+  /// The suggestion message to display in the chat interface.
+  ///
+  /// This message is shown to users when they first open the chat interface,
+  /// providing a extra explaination above the suggestions.
+  final String? suggestionsMessage;
 
   /// The welcome message to display in the chat interface.
   ///

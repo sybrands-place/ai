@@ -42,27 +42,11 @@ class ChatSuggestionsView extends StatelessWidget {
                 margin: const EdgeInsets.all(8),
                 padding: const EdgeInsets.all(8),
                 decoration: suggestionStyle.decoration,
-                child: Stack(
-                  children: [
-                    Text(
-                      suggestion,
-                      softWrap: true,
-                      maxLines: 3,
-                      style: suggestionStyle.textStyle,
-                    ),
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Transform.translate(
-                          offset: Offset(16, 16),
-                          child: Icon(
-                            Icons.touch_app_outlined,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  suggestion,
+                  softWrap: true,
+                  maxLines: 3,
+                  style: suggestionStyle.textStyle,
                 ),
               ),
             ),

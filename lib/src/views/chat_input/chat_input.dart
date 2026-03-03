@@ -208,6 +208,9 @@ class _ChatInputState extends State<ChatInput> {
                             autofocus: widget.autofocus,
                             inputState: _inputState,
                             cancelButtonStyle: _chatStyle!.cancelButtonStyle!,
+                            voiceNoteRecorderStyle:
+                                _chatStyle!.voiceNoteRecorderStyle!,
+                            chatStrings: _viewModel!.strings,
                           ),
                         ),
                         Padding(
@@ -288,7 +291,7 @@ class _ChatInputState extends State<ChatInput> {
     }
 
     if (file == null) {
-      AdaptiveSnackBar.show(context, 'Unable to record audio');
+      AdaptiveSnackBar.show(context, _viewModel!.strings.unableToRecordAudio);
       return;
     }
 

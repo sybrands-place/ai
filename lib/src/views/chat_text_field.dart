@@ -70,41 +70,51 @@ class ChatTextField extends StatelessWidget {
   final void Function(String text) onSubmitted;
 
   @override
-  Widget build(BuildContext context) =>
-      isCupertinoApp(context)
-          ? CupertinoTextField(
-            minLines: minLines,
-            maxLines: maxLines,
-            controller: controller,
-            autofocus: autofocus,
-            focusNode: focusNode,
-            onSubmitted: onSubmitted,
-            style: style,
-            placeholder: hintText,
-            inputFormatters: [FilteringTextInputFormatter.singleLineFormatter],
-            placeholderStyle: hintStyle,
-            padding: hintPadding ?? EdgeInsets.zero,
-            decoration: BoxDecoration(
-              border: Border.all(width: 0, color: ToolkitColors.transparent),
+  Widget build(BuildContext context) => CallbackShortcuts(
+    bindings: {
+      const SingleActivator(LogicalKeyboardKey.enter):
+          () => onSubmitted(controller.text),
+    },
+    child:
+        isCupertinoApp(context)
+            ? CupertinoTextField(
+              minLines: minLines,
+              maxLines: maxLines,
+              controller: controller,
+              autofocus: autofocus,
+              focusNode: focusNode,
+              onSubmitted: onSubmitted,
+              style: style,
+              placeholder: hintText,
+              inputFormatters: [
+                FilteringTextInputFormatter.singleLineFormatter,
+              ],
+              placeholderStyle: hintStyle,
+              padding: hintPadding ?? EdgeInsets.zero,
+              decoration: BoxDecoration(
+                border: Border.all(width: 0, color: ToolkitColors.transparent),
+              ),
+              textInputAction: textInputAction,
+            )
+            : TextField(
+              minLines: minLines,
+              maxLines: maxLines,
+              controller: controller,
+              autofocus: autofocus,
+              focusNode: focusNode,
+              textInputAction: textInputAction,
+              onSubmitted: onSubmitted,
+              inputFormatters: [
+                FilteringTextInputFormatter.singleLineFormatter,
+              ],
+              style: style,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: hintText,
+                hintStyle: hintStyle,
+                contentPadding: hintPadding,
+                isDense: false,
+              ),
             ),
-            textInputAction: textInputAction,
-          )
-          : TextField(
-            minLines: minLines,
-            maxLines: maxLines,
-            controller: controller,
-            autofocus: autofocus,
-            focusNode: focusNode,
-            textInputAction: textInputAction,
-            onSubmitted: onSubmitted,
-            inputFormatters: [FilteringTextInputFormatter.singleLineFormatter],
-            style: style,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: hintText,
-              hintStyle: hintStyle,
-              contentPadding: hintPadding,
-              isDense: false,
-            ),
-          );
+  );
 }

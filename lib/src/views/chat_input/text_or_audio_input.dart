@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import '../../strings/llm_chat_view_strings.dart';
 import 'package:waveform_recorder/waveform_recorder.dart';
 
 import '../../styles/styles.dart';
@@ -25,6 +26,7 @@ class TextOrAudioInput extends StatelessWidget {
   /// - [autofocus]: Determines if the text field should be focused on build.
   /// - [inputState]: Represents the current state of the input.
   /// - [cancelButtonStyle]: Defines the styling for the cancel button.
+  /// - [voiceNoteRecorderStyle]: Defines the styling for the waveform recorder.
   const TextOrAudioInput({
     super.key,
     required ChatInputStyle inputStyle,
@@ -37,6 +39,8 @@ class TextOrAudioInput extends StatelessWidget {
     required bool autofocus,
     required InputState inputState,
     required ActionButtonStyle cancelButtonStyle,
+    required VoiceNoteRecorderStyle voiceNoteRecorderStyle,
+    required LlmChatViewStrings chatStrings,
   }) : _cancelButtonStyle = cancelButtonStyle,
        _inputState = inputState,
        _autofocus = autofocus,
@@ -46,7 +50,9 @@ class TextOrAudioInput extends StatelessWidget {
        _onRecordingStopped = onRecordingStopped,
        _onCancelEdit = onCancelEdit,
        _waveController = waveController,
-       _inputStyle = inputStyle;
+       _inputStyle = inputStyle,
+       _voiceNoteRecorderStyle = voiceNoteRecorderStyle,
+       _chatStrings = chatStrings;
 
   final ChatInputStyle _inputStyle;
   final WaveformRecorderController _waveController;
@@ -58,6 +64,8 @@ class TextOrAudioInput extends StatelessWidget {
   final bool _autofocus;
   final InputState _inputState;
   final ActionButtonStyle _cancelButtonStyle;
+  final VoiceNoteRecorderStyle _voiceNoteRecorderStyle;
+  final LlmChatViewStrings _chatStrings;
   static const _minInputHeight = 48.0;
   static const _maxInputHeight = 144.0;
 
@@ -82,7 +90,10 @@ class TextOrAudioInput extends StatelessWidget {
                 _waveController.isRecording
                     ? WaveformRecorder(
                       controller: _waveController,
-                      height: _minInputHeight,
+                      height: _voiceNoteRecorderStyle.height!,
+                      waveColor: _voiceNoteRecorderStyle.waveColor!,
+                      durationTextStyle:
+                          _voiceNoteRecorderStyle.durationTextStyle!,
                       onRecordingStopped: _onRecordingStopped,
                     )
                     : ChatTextField(
@@ -118,6 +129,7 @@ class TextOrAudioInput extends StatelessWidget {
                 ? EditingIndicator(
                   onCancelEdit: _onCancelEdit,
                   cancelButtonStyle: _cancelButtonStyle,
+                  editingTitle: _chatStrings.editing,
                 )
                 : const SizedBox(),
       ),

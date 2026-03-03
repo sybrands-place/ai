@@ -4,6 +4,7 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../chat_view_model/chat_view_model_client.dart';
 import '../../providers/interface/chat_message.dart';
@@ -35,74 +36,85 @@ class LlmMessageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(
     children: [
-      Flexible(
-        flex: 6,
-        child: Column(
-          children: [
-            ChatViewModelClient(
-              builder: (context, viewModel, child) {
-                final text = message.text;
-                final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
-                final llmStyle = LlmMessageStyle.resolve(
-                  chatStyle.llmMessageStyle,
-                );
+      // const Spacer(flex: 1,),
+      ChatViewModelClient(
+        builder: (context, viewModel, child) {
+          final text = message.text;
+          final chatStyle = LlmChatViewStyle.resolve(viewModel.style);
+          final llmStyle = LlmMessageStyle.resolve(chatStyle.llmMessageStyle);
+          final chatString = viewModel.strings;
 
-                return Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Container(
-                        height: 20,
-                        width: 20,
-                        decoration: llmStyle.iconDecoration,
-                        child: Icon(
-                          llmStyle.icon,
-                          color: llmStyle.iconColor,
-                          size: 12,
-                        ),
+          return Flexible(
+            flex: llmStyle.flex,
+            child: Container(
+              constraints: BoxConstraints(
+                minWidth: llmStyle.minWidth,
+                maxWidth: llmStyle.maxWidth,
+              ),
+              margin: llmStyle.margin,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Container(
+                      height: 20,
+                      width: 20,
+                      decoration: llmStyle.iconDecoration,
+                      child: Icon(
+                        llmStyle.icon,
+                        color: llmStyle.iconColor,
+                        size: 12,
                       ),
                     ),
-                    HoveringButtons(
-                      isUserMessage: false,
-                      chatStyle: chatStyle,
-                      clipboardText: text,
-                      child: Container(
-                        decoration: llmStyle.decoration,
-                        margin: const EdgeInsets.only(left: 28),
-                        padding: const EdgeInsets.all(8),
-                        child:
-                            (text == null || text.trim().isEmpty)
-                                ? SizedBox(
-                                  width: 32,
-                                  child: JumpingDotsProgressIndicator(
-                                    fontSize: 24,
-                                    color: chatStyle.progressIndicatorColor!,
-                                  ),
-                                )
-                                : AdaptiveCopyText(
-                                  clipboardText: text,
-                                  chatStyle: chatStyle,
-                                  child:
-                                      isWelcomeMessage ||
-                                              viewModel.responseBuilder == null
-                                          ? MarkdownBody(
-                                            data: text,
-                                            selectable: false,
-                                            styleSheet: llmStyle.markdownStyle,
-                                          )
-                                          : viewModel.responseBuilder!(
-                                            context,
-                                            text,
-                                          ),
+                  ),
+                  HoveringButtons(
+                    isUserMessage: false,
+                    chatStyle: chatStyle,
+                    clipboardText: text,
+                    clipboardMessage: chatString.copyToClipboard,
+                    child: Container(
+                      width: double.infinity,
+                      decoration: llmStyle.decoration,
+                      margin: const EdgeInsets.only(left: 28),
+                      padding: llmStyle.padding,
+                      child:
+                          text == null
+                              ? SizedBox(
+                                width: 32,
+                                child: JumpingDotsProgressIndicator(
+                                  fontSize: 24,
+                                  color: chatStyle.progressIndicatorColor!,
                                 ),
-                      ),
+                              )
+                              : AdaptiveCopyText(
+                                clipboardText: text,
+                                chatStyle: chatStyle,
+                                chatStrings: chatString,
+                                child:
+                                    isWelcomeMessage ||
+                                            viewModel.responseBuilder == null
+                                        ? MarkdownBody(
+                                          data: text,
+                                          selectable: false,
+                                          styleSheet: llmStyle.markdownStyle,
+                                          onTapLink: (_, href, _) {
+                                            if (href != null) {
+                                              launchUrl(Uri.parse(href));
+                                            }
+                                          },
+                                        )
+                                        : viewModel.responseBuilder!(
+                                          context,
+                                          text,
+                                        ),
+                              ),
                     ),
-                  ],
-                );
-              },
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          );
+        },
       ),
       const Flexible(flex: 0, child: SizedBox()),
     ],
